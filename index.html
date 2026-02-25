@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WheatherApIApp</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="searchbox">
+      <input id="city_input" placeholder="Enter City Name" />
+      <button onclick="fetchdata()">Search</button>
+    </div>
+
+    <div class="weathercard">
+      <h3 id="city_name">🌍 City:</h3>
+      <h4 id="city_condition">🌦️ Condition:</h4>
+      <h4 id="city_temp">🌡️ Temperature:</h4>
+      <h4 id="city_feelslike">🤔 Feels Like:</h4>
+      <h4 id="city_humidity">💧 Humidity:</h4>
+      <h4 id="city_wind">🌬️ Wind Speed:</h4>
+    </div>
+
+    <script>
+      async function fetchdata() {
+        const city_input = document.getElementById("city_input").value;
+        let city_name = document.getElementById("city_name");
+        let city_temp = document.getElementById("city_temp");
+        let city_humidity = document.getElementById("city_humidity");
+        let city_condition = document.getElementById("city_condition");
+        let city_feelslike = document.getElementById("city_feelslike");
+        let city_wind = document.getElementById("city_wind");
+        
+        let req_data = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city_input}&appid=5870c2a238d00ed16c15edbb5db5103b&units=metric`
+        );
+        let format_data = await req_data.json();
+
+        // FIXED: Changed '+=' to '=' so it refreshes instead of adding.
+        // Also kept your original labels so they don't disappear.
+        city_name.textContent = `🌍 City: ${format_data.name}`;
+        city_temp.textContent = `🌡️ Temperature: ${format_data.main.temp}`;
+        city_humidity.textContent = `💧 Humidity: ${format_data.main.humidity}`;
+        city_condition.textContent = `🌦️ Condition: ${format_data.weather[0].description}`;
+        city_feelslike.textContent = `🤔 Feels Like: ${format_data.main.feels_like}`;
+        city_wind.textContent = `🌬️ Wind Speed: ${format_data.wind.speed}`;
+      }
+    </script>
+  </body>
+</html>
